@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spring-boots on kai-linn&#39;s Blog</title>
+    <link>kai-lin.github.io/spring-boot/</link>
+    <description>Recent content in Spring-boots on kai-linn&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 22 Jun 2020 22:04:58 +0800</lastBuildDate>
+    
+	<atom:link href="kai-lin.github.io/spring-boot/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>IoC容器</title>
+      <link>kai-lin.github.io/spring-boot/ioc%E5%AE%B9%E5%99%A8/</link>
+      <pubDate>Mon, 22 Jun 2020 22:04:58 +0800</pubDate>
+      
+      <guid>kai-lin.github.io/spring-boot/ioc%E5%AE%B9%E5%99%A8/</guid>
+      <description>IoC容器 IoC容器介绍 ​ Spring把每一个要管理的对象成为Spring Bean，Spring IoC容器是管理Spring Bean的容器。</description>
+    </item>
+    
+  </channel>
+</rss>

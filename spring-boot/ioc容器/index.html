@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>IoC容器 - kai-linn&#39;s Blog</title>
+<meta name="description" content="  ">
+<meta name="generator" content="Hugo 0.72.0" />
+<link href="kai-lin.github.io/index.xml" rel="alternate" type="application/rss+xml">
+<link rel="canonical" href="kai-lin.github.io/spring-boot/ioc%E5%AE%B9%E5%99%A8/">
+<link rel="stylesheet" href="kai-lin.github.io/css/theme.min.css">
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<link rel="stylesheet" href="kai-lin.github.io/css/chroma.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js"></script>
+<script src="kai-lin.github.io/js/bundle.js"></script><style>
+:root {}
+</style>
+<meta property="og:title" content="IoC容器" />
+<meta property="og:description" content="IoC容器 IoC容器介绍 ​ Spring把每一个要管理的对象成为Spring Bean，Spring IoC容器是管理Spring Bean的容器。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="kai-lin.github.io/spring-boot/ioc%E5%AE%B9%E5%99%A8/" />
+<meta property="og:image" content="/111.jpg"/>
+<meta property="article:published_time" content="2020-06-22T22:04:58+08:00" />
+<meta property="article:modified_time" content="2020-06-22T22:04:58+08:00" /><meta property="og:site_name" content="kai-linn&#39;s blog" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="/111.jpg"/>
+
+<meta name="twitter:title" content="IoC容器"/>
+<meta name="twitter:description" content="IoC容器 IoC容器介绍 ​ Spring把每一个要管理的对象成为Spring Bean，Spring IoC容器是管理Spring Bean的容器。"/>
+<meta itemprop="name" content="IoC容器">
+<meta itemprop="description" content="IoC容器 IoC容器介绍 ​ Spring把每一个要管理的对象成为Spring Bean，Spring IoC容器是管理Spring Bean的容器。">
+<meta itemprop="datePublished" content="2020-06-22T22:04:58&#43;08:00" />
+<meta itemprop="dateModified" content="2020-06-22T22:04:58&#43;08:00" />
+<meta itemprop="wordCount" content="2496">
+<meta itemprop="image" content="/111.jpg"/>
+
+
+
+<meta itemprop="keywords" content="" /></head>
+<body><div class="container"><header>
+<h1>kai-linn&#39;s Blog</h1>
+
+ <span class="version">Version 0.9.2</span>
+<a href="https://github.com/kai-linn" class="github"><i class="fab fa-github"></i></a>
+<p class="description">  </p>
+
+</header>
+<div class="global-menu">
+<nav>
+<ul>
+<li><a href="kai-lin.github.io/">Home</a></li></ul>
+</nav>
+</div>
+<div class="content-container">
+<main><h1>IoC容器</h1>
+<h1 id="ioc容器">IoC容器</h1>
+<h3 id="ioc容器介绍">IoC容器介绍</h3>
+<p>​		Spring把每一个要管理的对象成为Spring Bean，Spring IoC容器是管理Spring Bean的容器。</p>
+<p>所有的IoC容器都需要实现顶层的<code>BeanFactory</code>接口。</p>
+<h4 id="beanfactory">BeanFactory</h4>
+<p>​		<code>BeanFactory</code>可以通过五种方式来从容器中获取一个Bean对象</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//  通过Bean的名称来获取Bean对象
+</span><span style="color:#75715e"></span>Object <span style="color:#a6e22e">getBean</span><span style="color:#f92672">(</span>String name<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> BeansException<span style="color:#f92672">;</span>
+
+<span style="color:#75715e">//  通过Bean的名称和类型来获取一个Bean对象
+</span><span style="color:#75715e"></span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> T <span style="color:#a6e22e">getBean</span><span style="color:#f92672">(</span>String name<span style="color:#f92672">,</span> Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> requiredType<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> BeansException<span style="color:#f92672">;</span>
+
+<span style="color:#75715e">//  通过Bean的类型来返回一个Bean对象
+</span><span style="color:#75715e"></span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> T <span style="color:#a6e22e">getBean</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> requiredType<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> BeansException<span style="color:#f92672">;</span>
+
+Object <span style="color:#a6e22e">getBean</span><span style="color:#f92672">(</span>String name<span style="color:#f92672">,</span> Object<span style="color:#f92672">...</span> args<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> BeansException<span style="color:#f92672">;</span> 
+
+<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> T <span style="color:#a6e22e">getBean</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> requiredType<span style="color:#f92672">,</span> Object<span style="color:#f92672">...</span> args<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> BeansException<span style="color:#f92672">;</span>
+</code></pre></div><p>​		获取IoC容器中Bean信息的方法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//  判度容器内是否含有名为name的Bean对象
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">containsBean</span><span style="color:#f92672">(</span>String name<span style="color:#f92672">);</span>
+
+<span style="color:#75715e">//  判断Bean对象是否是单例
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isSingleton</span><span style="color:#f92672">(</span>String name<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> NoSuchBeanDefinitionException<span style="color:#f92672">;</span>
+
+<span style="color:#75715e">// 判断Bean对象是否是原型
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isPrototype</span><span style="color:#f92672">(</span>String name<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> NoSuchBeanDefinitionException<span style="color:#f92672">;</span>
+
+<span style="color:#75715e">// 判断名为name的Bean对象的类型是否为typeToMatch
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">isTypeMatch</span><span style="color:#f92672">(</span>String name<span style="color:#f92672">,</span> Class<span style="color:#f92672">&lt;?&gt;</span> typeToMatch<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> NoSuchBeanDefinitionException<span style="color:#f92672">;</span>
+
+<span style="color:#75715e">// 获取名为name的Bean对象的类型信息
+</span><span style="color:#75715e"></span>Class<span style="color:#f92672">&lt;?&gt;</span> getType<span style="color:#f92672">(</span>String name<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> NoSuchBeanDefinitionException<span style="color:#f92672">;</span>
+
+
+</code></pre></div><h3 id="bean装配到ioc容器的方法">Bean装配到IoC容器的方法</h3>
+<h4 id="方法一通过bean注解装配">方法一：通过@Bean注解装配</h4>
+<p>​		配置文件定义</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Configuration</span>	<span style="color:#75715e">//代表配置文件, Spring容器根据配置文件来装配
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AppConfig</span> <span style="color:#f92672">{</span>
+
+	<span style="color:#a6e22e">@Bean</span><span style="color:#f92672">(</span>name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;user&#34;</span><span style="color:#f92672">)</span> <span style="color:#75715e">//  定义方法的返回值为一个Bean对象，name表示名称
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">public</span> User <span style="color:#a6e22e">initUser</span><span style="color:#f92672">(){</span>
+		User user <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> User<span style="color:#f92672">();</span>
+		<span style="color:#75715e">/*......  User的配置*/</span>
+		<span style="color:#66d9ef">return</span> user<span style="color:#f92672">;</span>
+	<span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>​		创建IoC容器（Spring通过一个<code>@Configuration</code>定义的配置文件创建容器）</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">ApplicationContext ctx <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> AnnotationConfigApplicationContext<span style="color:#f92672">(</span>AppConfiguration<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+</code></pre></div><p>​		<code> ApplicationContext</code>是继承自BeanFactory的容器接口，<code>AnnotationConfigApplicationContext</code>是<code> Applicationontext</code>的实现类，是一个基于注解的容器。</p>
+<h5 id="通过bean装配的优势">通过<code>@Bean</code>装配的优势</h5>
+<p>​		可以自定义第三方Bean。</p>
+<h4 id="方法二通过component和componentscan来扫描装配bean">方法二：通过<code>@Component</code>和<code>@ComponentScan</code>来扫描装配Bean</h4>
+<p>​		使用<code>@Component</code>来表明哪个类要装配进容器，再通过<code>@Value</code>注解来指定类属性的值</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Component</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">User</span> <span style="color:#f92672">{</span>
+	<span style="color:#a6e22e">@Value</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;1&#34;</span><span style="color:#f92672">)</span>
+	<span style="color:#66d9ef">private</span> Long id<span style="color:#f92672">;</span>
+
+	<span style="color:#a6e22e">@Value</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;user_name_1&#34;</span><span style="color:#f92672">)</span>
+	<span style="color:#66d9ef">private</span> String userName<span style="color:#f92672">;</span>
+</code></pre></div><p>​		使用<code>@ComponentScan</code>注解来扫描需要装配到容器的Bean</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@ComponentScan</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AppConfiguration</span> <span style="color:#f92672">{</span><span style="color:#75715e">/* ... */</span><span style="color:#f92672">}</span>
+</code></pre></div><p>​		<code>		@ComponentScan</code>注解标注的扫描类默认只会扫描对应类所在文件夹及其子文件夹下的Bean对象。(可以通过<code>basePackages</code>属性自定义扫描的包）</p>
+<h5 id="componentscan注解的配置项"><code>@ComponentScan</code>注解的配置项</h5>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// 定义扫描的包的全限定名，如com.example.demo.*
+</span><span style="color:#75715e"></span>String<span style="color:#f92672">[]</span> <span style="color:#a6e22e">value</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#f92672">{};</span>
+<span style="color:#75715e">// 定义扫描的包的全限定名，如com.example.demo
+</span><span style="color:#75715e"></span>String<span style="color:#f92672">[]</span> <span style="color:#a6e22e">basePackages</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#f92672">{};</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// 定义扫描的类
+</span><span style="color:#75715e"></span>Class<span style="color:#f92672">&lt;?&gt;[]</span> basePackageClasses<span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#f92672">{};</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// 满足过滤器条件时扫描
+</span><span style="color:#75715e"></span>Filter<span style="color:#f92672">[]</span> <span style="color:#a6e22e">includeFilters</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#f92672">{};</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// 不满足过滤器条件时扫描
+</span><span style="color:#75715e"></span>Filter<span style="color:#f92672">[]</span> <span style="color:#a6e22e">excludeFilters</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#f92672">{};</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// 是否延时初始化
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">lazyInit</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+</code></pre></div><p>过滤器<code>@Filter</code>的定义</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">/* 
+</span><span style="color:#75715e">过滤器的类型，ANNOTATION表示按注解过滤，CUSTOM表示自定义类型，
+</span><span style="color:#75715e">ASSIGNABLE——TYPE表示按指定类型过滤
+</span><span style="color:#75715e">*/</span>
+FilterType <span style="color:#a6e22e">type</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> FilterType<span style="color:#f92672">.</span><span style="color:#a6e22e">ANNOTATION</span><span style="color:#f92672">;</span>
+<span style="color:#75715e">// 定义过滤的类
+</span><span style="color:#75715e"></span>Class<span style="color:#f92672">&lt;?&gt;</span> value<span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#f92672">{};</span>
+
+<span style="color:#75715e">// 定义过滤的类
+</span><span style="color:#75715e"></span>Class<span style="color:#f92672">&lt;?&gt;</span> classes<span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#f92672">{};</span>
+
+<span style="color:#75715e">// 定义正则表达式匹配
+</span><span style="color:#75715e"></span>String<span style="color:#f92672">[]</span> <span style="color:#a6e22e">pattern</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">default</span> <span style="color:#f92672">{};</span>
+</code></pre></div><h4 id="方法三-通过xml装配bean">方法三: 通过XML装配Bean</h4>
+<p>使用xml配置要装配的Bean（spring-other.xml文件）</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span style="color:#f92672">&lt;beans</span> <span style="color:#a6e22e">xmlns=</span><span style="color:#e6db74">&#34;http://www.springframework.org/schema/beans&#34;</span>
+	<span style="color:#a6e22e">xmlns:xsi=</span><span style="color:#e6db74">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+    <span style="color:#a6e22e">xsi:schemaLocation=</span><span style="color:#e6db74">&#34;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&#34;</span><span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;bean</span> <span style="color:#a6e22e">id=</span><span style="color:#e6db74">&#34;squirrel&#34;</span> <span style="color:#a6e22e">class=</span><span style="color:#e6db74">&#34;com.kailin.xmlTest.Squirrel&#34;</span><span style="color:#f92672">/&gt;</span>
+<span style="color:#f92672">&lt;/beans&gt;</span>
+</code></pre></div><p>使用<code>@ImportResource</code>注解来装配XML文件中的Bean</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@ImportResource</span><span style="color:#f92672">(</span>value<span style="color:#f92672">={</span><span style="color:#e6db74">&#34;classpath:spring-other.xml&#34;</span><span style="color:#f92672">})</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AppConfiguration</span> <span style="color:#f92672">{</span><span style="color:#75715e">/* ... */</span><span style="color:#f92672">}</span>
+</code></pre></div><h3 id="依赖注入">依赖注入</h3>
+<p>​		加入到容器的Bean之间并不是相互独立的，而是存在相互之间的以来（组合、聚合）。</p>
+<p>​		通过<code>@Autowired</code>注解来实现Bean之间的依赖关系，通过@Autowired可以根据对应的类型信息从容器中找到依赖的Bean。</p>
+<h4 id="autowired注解"><code>@AutoWired</code>注解</h4>
+<ul>
+<li><code>@Autowired</code>对构造器的参数进行依赖注入</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">BussinessPerson</span> <span style="color:#f92672">(</span><span style="color:#a6e22e">@Autowired</span> Animal animal<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+	<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">animal</span> <span style="color:#f92672">=</span> animal<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><ul>
+<li><code>@Autowired</code>对属性进行依赖注入（只有类含有不带参数的构造器时可以使用）</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Autowired</span>
+<span style="color:#66d9ef">private</span> Animal animal <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+</code></pre></div><ul>
+<li><code>@Autowired</code>对方法进行依赖注入（只有类含有不带参数的构造器时可以使用）</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Autowired</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setAnimal</span> <span style="color:#f92672">(</span> Animal animal <span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+	<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">animal</span> <span style="color:#f92672">=</span> animal<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>如果有多个对应类型的Bean，那么再通过<code>@Autowired</code>修饰的属性名称和Bean名称进行匹配，如果匹配不到则抛出异常。</p>
+<h5 id="消除由多个匹配的bean产生的歧义">消除由多个匹配的Bean产生的歧义</h5>
+<ol>
+<li>通过<code>@Primary</code>注解
+<code>@Primary</code>注解修饰的Bean在出现歧义时会优先注入。</li>
+<li>通过<code>@Qualifier</code>注解
+通过<code>@Qualifier</code>注解来指定注入的Bean名称。<code>@Autowired</code>和<code>@Qualifier</code>一起，通过类型和名称找到注入的Bean。</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Autowired</span>
+<span style="color:#a6e22e">@Qualifier</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;dog&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">private</span> Animal animal <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+</code></pre></div><h3 id="bean的生命周期">Bean的生命周期</h3>
+<p>Bean的生命周期一共分为4个部分：Bean的定义、Bean的初始化、Bean的生存期、Bean的销毁。</p>
+<h3 id="通过属性文件配置bean">通过属性文件配置Bean</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Value</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;${database.driverName}&#34;</span><span style="color:#f92672">)</span>          
+<span style="color:#66d9ef">private</span> String driverName <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+
+<span style="color:#a6e22e">@Value</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;${database.url}&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">private</span> String url <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+</code></pre></div><p>${}占位符表示读取上下文（application.properties属性文件）的属性值装配。
+也可以自己定义属性文件，并通过<code>@PropertySource</code>注解来定义和加载到Spring的上下文中（修饰主类）</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@PropertySource</span> <span style="color:#f92672">(</span> value <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;classpath:jdbc.properties&#34;</span> <span style="color:#f92672">}</span> <span style="color:#f92672">,</span> ignoreResourceNotFound <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span> <span style="color:#f92672">)</span>
+<span style="color:#75715e">// classpath表示类文件路径，即到src的路径
+</span></code></pre></div><h3 id="条件装配bean">条件装配Bean</h3>
+<p>​	根据Bean的状态来决定是否要将其装配到容器中。通过<code>@Conditional</code>注解和<code>Condition</code>接口来实现对应的功能。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// Conditional注解修饰待装配的Bean(@Bean、@Component)
+</span><span style="color:#75715e">//ConditionImplementation为Condition的实现类，通过ConditionImplementation重写的match方法来决定是否将给Bean装配到容器
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">@Conditional</span> <span style="color:#f92672">(</span> ConditionImplementation<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">matches</span> <span style="color:#f92672">(</span> ConditionContext context <span style="color:#f92672">,</span>  AnnotatedTypeMetadata metadata <span style="color:#f92672">);</span>
+</code></pre></div><h3 id="bean的作用域">Bean的作用域</h3>
+<table>
+<thead>
+<tr>
+<th align="center">作用域类型</th>
+<th align="center">适用范围</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><strong>singleton</strong></td>
+<td align="center">所有Spring应用</td>
+<td align="center">default，IoC容器只存在单例</td>
+</tr>
+<tr>
+<td align="center"><strong>prototype</strong></td>
+<td align="center">所有Spring应用</td>
+<td align="center">每次getBean()都会创建一个新的Bean</td>
+</tr>
+<tr>
+<td align="center"><strong>session</strong></td>
+<td align="center">Spring web应用</td>
+<td align="center">HTTP会话</td>
+</tr>
+<tr>
+<td align="center"><strong>application</strong></td>
+<td align="center">Spring web应用</td>
+<td align="center">Web工程生命周期</td>
+</tr>
+<tr>
+<td align="center">request</td>
+<td align="center">Spring web应用</td>
+<td align="center">Web工程的单次请求</td>
+</tr>
+<tr>
+<td align="center">globleSession</td>
+<td align="center">Spring web应用</td>
+<td align="center">全局HTTP Session中</td>
+</tr>
+</tbody>
+</table>
+<p>使用<code>@Scope</code>注解来定义Bean的作用域</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">/*
+</span><span style="color:#75715e">ConfigurableBeanFactory.SCOPE_PROTOTYPE
+</span><span style="color:#75715e">WebApplicationContext.SCOPE_REQUEST
+</span><span style="color:#75715e">WebApplicationContext.SCOPE_SESSION
+</span><span style="color:#75715e">WebApplicationContext.SCOPE_APPLICATION
+</span><span style="color:#75715e">*/</span>
+<span style="color:#a6e22e">@Component</span>
+<span style="color:#a6e22e">@Scope</span><span style="color:#f92672">(</span>ConfigurableBeanFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">SCOPE_PROTOTYPE</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ScopeBean</span><span style="color:#f92672">{</span> <span style="color:#75715e">/* ... */</span><span style="color:#f92672">}</span>
+</code></pre></div><h3 id="spring-ei-表达式语言">Spring EI (表达式语言)</h3>
+<h5 id="1-">1. $</h5>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Value</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;${database.driverName}&#34;</span><span style="color:#f92672">)</span>      <span style="color:#75715e">// 将当前上下文环境中的database.driverName装配给driver
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">private</span> String driver<span style="color:#f92672">;</span>
+</code></pre></div><h5 id="2-">2.</h5>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Value</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;#{beanName.str}&#34;</span><span style="color:#f92672">)</span>          <span style="color:#75715e">// 将beanName对象的str属性值装配给str
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">private</span> String str <span style="color:#f92672">;</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Value</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;#{beanName.str?.toUpperCase() }&#34;</span><span style="color:#f92672">)</span>    <span style="color:#75715e">// 如果beanName的str属性不为空则将其转为大写装配给str
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">private</span> String str<span style="color:#f92672">;</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Value</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;#{beanName.d &gt; 1000 ? &#39;larger&#39; : &#39;smaller&#39;}&#34;</span><span style="color:#f92672">)</span>   <span style="color:#75715e">// 三元运算
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">private</span> String resultDesc <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+</code></pre></div><div class="edit-meta">
+Last updated on 22 Jun 2020
+
+
+<br>
+Published on 22 Jun 2020
+<br><a href="https://github.com/kai-linn/edit/master/content/spring-boot%5cIoC%e5%ae%b9%e5%99%a8.md" class="edit-page"><i class="fas fa-pen-square"></i> Edit on GitHub</a></div><nav class="pagination"><a class="nav nav-prev" href="kai-lin.github.io/spring-boot/" title="Spring-boots"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - Spring-boots</a>
+
+</nav><footer></footer>
+</main><div class="sidebar">
+
+<nav class="open-menu">
+<ul>
+<li class=""><a href="kai-lin.github.io">Home</a></li>
+
+<li class="parent"><a href="kai-lin.github.io/spring-boot/">Spring-boots</a>
+  
+<ul class="sub-menu">
+<li class="active"><a href="kai-lin.github.io/spring-boot/ioc%E5%AE%B9%E5%99%A8/">IoC容器</a></li>
+</ul>
+  
+</li>
+</ul>
+</nav>
+
+
+
+<div class="sidebar-footer"></div>
+</div>
+</div><a href="#" id="backtothetop-fixed" class="backtothetop"
+ data-backtothetop-duration="600"
+ data-backtothetop-easing="easeOutQuart"
+ data-backtothetop-fixed-fadeIn="1000"
+ data-backtothetop-fixed-fadeOut="1000"
+ data-backtothetop-fixed-bottom="10"
+ data-backtothetop-fixed-right="20">
+<span class="fa-layers fa-fw">
+<i class="fas fa-circle"></i>
+<i class="fas fa-arrow-circle-up"></i>
+</span></a>
+</div>
+</body>
+</html>
